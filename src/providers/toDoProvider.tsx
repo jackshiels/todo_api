@@ -1,21 +1,17 @@
+import React from "react";
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { ItemModel } from "../models/itemModel";
 import { State, reducer, toDoStore } from "../stores/toDoStore";
-import { HttpResult, OkGetResult } from "../stores/resultStore";
-import { usePostRequest } from "../hooks/usePostRequest";
-import { useDeleteRequest } from "../hooks/useDeleteRequest";
-import { useGetRequest } from "../hooks/useGetRequest";
+import { ToDoClient, ToDoItem } from "../controllers/todoController";
 
 type ToDoItemsState = {
-  items: ItemModel[];
-  AddItem: (item: ItemModel) => void;
-  DeleteItem: (id: number) => void;
+  items: ToDoItem[];
+  AddItem?: (item: ToDoItem) => Promise<void>;
+  UpdateItem?: (item: ToDoItem) => Promise<void>;
+  DeleteItem?: (id: number) => Promise<void>;
 };
 
 const initialState: ToDoItemsState = {
   items: toDoStore,
-  AddItem: () => {},
-  DeleteItem: () => {},
 };
 
 const initialLoadingState: State = {
@@ -37,48 +33,46 @@ export const useToDoContext = () => useContext(ToDoContext);
 
 export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatcher] = useReducer(reducer, initialLoadingState);
+  const controller = new ToDoClient();
 
   useEffect(() => {
     const GetInitialItems = async () => {
       dispatcher({ type: "initial_loading" });
-      const result: HttpResult = await useGetRequest({ apiUrl: "" });
-      if (result.statusCode === 200) {
+      try {
+        const result: ToDoItem[] = await controller.get();
         dispatcher({
           type: "initial_load_Succeeded",
-          itemList: (result as OkGetResult).items,
+          itemList: result,
         });
-      } else {
+      } catch {
         dispatcher({ type: "initial_load_failed" });
       }
     };
     GetInitialItems();
   });
 
-  const AddItem = async (item: ItemModel) => {
+  const AddItem = async (item: ToDoItem) => {
     dispatcher({ type: "adding_item", itemList: state.itemList });
-    const result: HttpResult = await usePostRequest({ apiUrl: "", item });
-    if (result.statusCode === 200) {
+    try {
+      const result: ToDoItem = await controller.create(item);
       dispatcher({
         type: "succeeded",
-        itemList: [...state.itemList, item],
+        itemList: [...state.itemList, result],
       });
-    } else {
+    } catch {
       dispatcher({ type: "failed", itemList: state.itemList });
     }
   };
 
   const DeleteItem = async (itemId: number) => {
     dispatcher({ type: "deleting_item", itemList: state.itemList });
-    const result: HttpResult = await useDeleteRequest({
-      apiUrl: "",
-      itemId: itemId,
-    });
-    if (result.statusCode === 200) {
+    try {
+      await controller.delete(itemId);
       dispatcher({
         type: "succeeded",
         itemList: state.itemList.filter((c) => c.id !== itemId),
       });
-    } else {
+    } catch {
       dispatcher({ type: "failed", itemList: state.itemList });
     }
   };

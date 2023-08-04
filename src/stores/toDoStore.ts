@@ -1,14 +1,6 @@
-import { ItemModel } from "../models/itemModel";
+import { ToDoItem } from "../controllers/todoController";
 
-export const toDoStore: ItemModel[] = [
-  {
-    id: 0,
-    name: "",
-    description: "",
-    completed: false,
-    timestamp: new Date(),
-  },
-];
+export const toDoStore: ToDoItem[] = [];
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -81,7 +73,7 @@ export interface State {
   deletingItem: Boolean;
   failed: Boolean;
   succeeded: Boolean;
-  itemList: ItemModel[];
+  itemList: ToDoItem[];
 }
 
 interface InitialLoading {
@@ -90,7 +82,7 @@ interface InitialLoading {
 
 interface InitialLoadSucceeded {
   type: "initial_load_Succeeded";
-  itemList: ItemModel[];
+  itemList: ToDoItem[];
 }
 
 interface InitialLoadFailed {
@@ -99,22 +91,22 @@ interface InitialLoadFailed {
 
 interface AddingItem {
   type: "adding_item";
-  itemList: ItemModel[];
+  itemList: ToDoItem[];
 }
 
 interface DeletingItem {
   type: "deleting_item";
-  itemList: ItemModel[];
+  itemList: ToDoItem[];
 }
 
 interface Succeeded {
   type: "succeeded";
-  itemList: ItemModel[];
+  itemList: ToDoItem[];
 }
 
 interface Failed {
   type: "failed";
-  itemList: ItemModel[];
+  itemList: ToDoItem[];
 }
 
 export type Action =

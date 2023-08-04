@@ -1,3 +1,5 @@
+using todo_service_api.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<IMockDatabase, MockDatabase>();
 
 var app = builder.Build();
 
