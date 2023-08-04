@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\todo_service_api.props" />
+</Project>
