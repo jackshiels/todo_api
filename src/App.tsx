@@ -1,12 +1,13 @@
 import "./App.css";
+import React from "react";
 import { ToDoProvider } from "./providers/toDoProvider";
+import { Banner } from "./components/banner";
 
 function App() {
   return (
     <ToDoProvider>
       <div className="App">
-        <header className="App-header"></header>
-        <h2>To Do App</h2>
+        <Banner title="To Do Items Tracker"></Banner>
       </div>
     </ToDoProvider>
   );

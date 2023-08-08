@@ -5,6 +5,7 @@ import { ToDoClient, ToDoItem } from "../controllers/todoController";
 
 type ToDoItemsState = {
   items: ToDoItem[];
+  loadCompleted: Boolean;
   AddItem?: (item: ToDoItem) => Promise<void>;
   UpdateItem?: (item: ToDoItem) => Promise<void>;
   DeleteItem?: (id: number) => Promise<void>;
@@ -12,6 +13,7 @@ type ToDoItemsState = {
 
 const initialState: ToDoItemsState = {
   items: toDoStore,
+  loadCompleted: false,
 };
 
 const initialLoadingState: State = {
@@ -33,13 +35,14 @@ export const useToDoContext = () => useContext(ToDoContext);
 
 export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatcher] = useReducer(reducer, initialLoadingState);
-  const controller = new ToDoClient();
 
   useEffect(() => {
     const GetInitialItems = async () => {
       dispatcher({ type: "initial_loading" });
       try {
-        const result: ToDoItem[] = await controller.get();
+        const result: ToDoItem[] = await new ToDoClient(
+          "https://localhost:7025"
+        ).get();
         dispatcher({
           type: "initial_load_Succeeded",
           itemList: result,
@@ -49,12 +52,14 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
     GetInitialItems();
-  });
+  }, []);
 
   const AddItem = async (item: ToDoItem) => {
     dispatcher({ type: "adding_item", itemList: state.itemList });
     try {
-      const result: ToDoItem = await controller.create(item);
+      const result: ToDoItem = await new ToDoClient(
+        "https://localhost:7025"
+      ).create(item);
       dispatcher({
         type: "succeeded",
         itemList: [...state.itemList, result],
@@ -67,7 +72,7 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
   const DeleteItem = async (itemId: number) => {
     dispatcher({ type: "deleting_item", itemList: state.itemList });
     try {
-      await controller.delete(itemId);
+      await new ToDoClient("https://localhost:7025").delete(itemId);
       dispatcher({
         type: "succeeded",
         itemList: state.itemList.filter((c) => c.id !== itemId),
@@ -79,6 +84,7 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
 
   const toDoState: ToDoItemsState = {
     items: state.itemList,
+    loadCompleted: true,
     AddItem: AddItem,
     DeleteItem: DeleteItem,
   };

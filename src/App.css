@@ -28,6 +28,14 @@
   color: #61dafb;
 }
 
+.Banner {
+  height: 130px;
+  margin-top: 0px;
+  padding-top: 5px;
+  color: white;
+  background: rgba(5, 83, 138, 1);
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
