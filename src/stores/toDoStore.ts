@@ -18,6 +18,7 @@ export const reducer = (state: State, action: Action): State => {
         initialLoading: false,
         initialLoadFailed: false,
         initialLoadSucceeded: true,
+        succeeded: true,
         itemList: action.itemList,
       };
     case "initial_load_failed":
@@ -34,6 +35,14 @@ export const reducer = (state: State, action: Action): State => {
         succeeded: false,
         failed: false,
         addingItem: true,
+        itemList: action.itemList,
+      };
+    case "completing_item":
+      return {
+        ...state,
+        succeeded: false,
+        failed: false,
+        completingItem: true,
         itemList: action.itemList,
       };
     case "deleting_item":
@@ -66,13 +75,14 @@ export const reducer = (state: State, action: Action): State => {
 };
 
 export interface State {
-  initialLoading: Boolean;
-  initialLoadSucceeded: Boolean;
-  initialLoadFailed: Boolean;
-  addingItem: Boolean;
-  deletingItem: Boolean;
-  failed: Boolean;
-  succeeded: Boolean;
+  initialLoading: boolean;
+  initialLoadSucceeded: boolean;
+  initialLoadFailed: boolean;
+  addingItem: boolean;
+  completingItem: boolean;
+  deletingItem: boolean;
+  failed: boolean;
+  succeeded: boolean;
   itemList: ToDoItem[];
 }
 
@@ -91,6 +101,11 @@ interface InitialLoadFailed {
 
 interface AddingItem {
   type: "adding_item";
+  itemList: ToDoItem[];
+}
+
+interface CompletingItem {
+  type: "completing_item";
   itemList: ToDoItem[];
 }
 
@@ -114,6 +129,7 @@ export type Action =
   | InitialLoadSucceeded
   | InitialLoadFailed
   | AddingItem
+  | CompletingItem
   | DeletingItem
   | Succeeded
   | Failed;

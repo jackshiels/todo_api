@@ -4,6 +4,7 @@ import { Item } from "./item";
 import { ToDoItem } from "../controllers/todoController";
 import { useToDoContext } from "../providers/toDoProvider";
 import { ToDoItemModel } from "../models/itemModel";
+import { AddItemWindow } from "./addItemWindow";
 
 interface Props {
   maxItems: number;
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export const ItemList: FC<Props> = (props: Props) => {
-  const { items } = useToDoContext();
+  const { items, loadCompleted } = useToDoContext();
 
   const [completedCount, setCompletedCount] = useState<number>(0);
   const Inc = () => setCompletedCount(completedCount + 1);
@@ -25,6 +26,7 @@ export const ItemList: FC<Props> = (props: Props) => {
   return (
     <>
       <nav className="ItemList">
+        <AddItemWindow enabled={loadCompleted} />
         {items.map((c: ToDoItem) => {
           return (
             <Item

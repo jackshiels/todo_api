@@ -2,7 +2,6 @@ import React from "react";
 import { FC, useReducer, useState } from "react";
 import { useToDoContext } from "../providers/toDoProvider";
 import { Action, reducer } from "../stores/itemStore";
-import { ToDoClient } from "../controllers/todoController";
 import { ToDoItemModel } from "../models/itemModel";
 
 interface Props {
@@ -18,7 +17,7 @@ interface Props {
 const deleteIcon = require("../images/icons8-delete-24.png");
 
 export const Item: FC<Props> = (props: Props) => {
-  const { DeleteItem } = useToDoContext();
+  const { DeleteItem, CompleteItem, loadCompleted } = useToDoContext();
   const { id, name, description, timestamp } = props;
 
   const [completed, setCompleted] = useState<boolean>(props.itemCompleted);
@@ -28,10 +27,7 @@ export const Item: FC<Props> = (props: Props) => {
 
   const HandleChange = async (action: Action) => {
     setCompleted(!completed);
-    await new ToDoClient("https://localhost:7025").markCompleted(
-      id,
-      action.complete
-    );
+    await CompleteItem(id, !completed);
     dispatcher(action);
   };
 
@@ -52,6 +48,7 @@ export const Item: FC<Props> = (props: Props) => {
           type="checkbox"
           value="Completed"
           checked={completed}
+          disabled={!loadCompleted}
           onChange={() => {
             completed
               ? HandleChange({ type: "incomplete", complete: false })

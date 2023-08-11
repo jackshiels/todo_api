@@ -5,8 +5,9 @@ import { ToDoClient, ToDoItem } from "../controllers/todoController";
 
 type ToDoItemsState = {
   items: ToDoItem[];
-  loadCompleted: Boolean;
+  loadCompleted: boolean;
   AddItem: (item: ToDoItem) => Promise<void>;
+  CompleteItem: (id: number, completed: boolean) => Promise<void>;
   DeleteItem: (id: number) => Promise<void>;
 };
 
@@ -14,6 +15,7 @@ const initialState: ToDoItemsState = {
   items: toDoStore,
   loadCompleted: false,
   AddItem: async () => {},
+  CompleteItem: async () => {},
   DeleteItem: async () => {},
 };
 
@@ -22,6 +24,7 @@ const initialLoadingState: State = {
   initialLoadSucceeded: false,
   initialLoadFailed: false,
   addingItem: false,
+  completingItem: false,
   deletingItem: false,
   succeeded: false,
   failed: false,
@@ -70,13 +73,29 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const DeleteItem = async (itemId: number) => {
-    dispatcher({ type: "deleting_item", itemList: state.itemList });
+  const CompleteItem = async (id: number, completed: Boolean) => {
+    dispatcher({ type: "adding_item", itemList: state.itemList });
     try {
-      await new ToDoClient("https://localhost:7025").delete(itemId);
+      const result: boolean = await new ToDoClient(
+        "https://localhost:7025"
+      ).markCompleted(id, completed as boolean);
+      (state.itemList.find((c) => c.id === id) as ToDoItem).completed = result;
       dispatcher({
         type: "succeeded",
-        itemList: state.itemList.filter((c) => c.id !== itemId),
+        itemList: [...state.itemList],
+      });
+    } catch {
+      dispatcher({ type: "failed", itemList: state.itemList });
+    }
+  };
+
+  const DeleteItem = async (id: number) => {
+    dispatcher({ type: "deleting_item", itemList: state.itemList });
+    try {
+      await new ToDoClient("https://localhost:7025").delete(id);
+      dispatcher({
+        type: "succeeded",
+        itemList: state.itemList.filter((c) => c.id !== id),
       });
     } catch {
       dispatcher({ type: "failed", itemList: state.itemList });
@@ -85,8 +104,9 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
 
   const toDoState: ToDoItemsState = {
     items: state.itemList,
-    loadCompleted: state.initialLoadSucceeded,
+    loadCompleted: state.initialLoadSucceeded && state.succeeded,
     AddItem: AddItem,
+    CompleteItem: CompleteItem,
     DeleteItem: DeleteItem,
   };
 

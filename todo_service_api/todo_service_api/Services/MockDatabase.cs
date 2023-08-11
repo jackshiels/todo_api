@@ -41,11 +41,19 @@ public class MockDatabase : IMockDatabase
 
     public ToDoItem Create(ToDoItem item)
     {
-        throw new NotImplementedException();
+        Thread.Sleep(2000);
+        var maxId = Items.Any() 
+            ? Items.Select(x => x.Id).Max() 
+            : 0;
+        item.Id = maxId + 1;
+        item.TimeStamp = DateTime.Now;
+        Items.Add(item);
+        return item;
     }
 
     public IEnumerable<ToDoItem> Delete(int itemId)
     {
+        Thread.Sleep(2000);
         Items = Items
             .Where(c => c.Id != itemId)
             .ToList();
@@ -54,7 +62,7 @@ public class MockDatabase : IMockDatabase
 
     public IEnumerable<ToDoItem> Get()
     {
-        Thread.Sleep(3000);
+        Thread.Sleep(2000);
         return Items;
     }
 
@@ -65,6 +73,7 @@ public class MockDatabase : IMockDatabase
 
     public ToDoItem Patch(ToDoItem item)
     {
+        Thread.Sleep(2000);
         var itemToReplace = Items.First(c => c.Id == item.Id);
         itemToReplace.Completed = item.Completed;
         return itemToReplace;
