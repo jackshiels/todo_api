@@ -36,6 +36,110 @@
   background: rgba(5, 83, 138, 1);
 }
 
+.ItemList {
+  float: left;
+  width: 300px;
+}
+
+.Item {
+  width: 200px;
+  float: left;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  height: 75px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 5px;
+  color: white;
+  background-color: crimson;
+  border: 2px white;
+  font-size: 14pt;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+.ItemComplete {
+  width: 200px;
+  float: left;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  height: 75px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 5px;
+  color: white;
+  background-color: seagreen;
+  border: 2px white;
+  font-size: 14pt;
+  font-weight: 600;
+  display: inline-flex;
+}
+
+.ItemCheckbox {
+  margin-right: 15px;
+}
+
+.ItemLabel {
+  padding-top: 25px;
+}
+
+.DeleteIcon {
+  padding: 7px;
+}
+
+.DeleteItem {
+  width: 40px;
+  float: left;
+  padding-top: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 10px;
+  height: 75px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  color: white;
+  background-color: darkgray;
+  border: 2px white;
+  align-items: center;
+  display: inline-flex;
+}
+
+.DeleteItem:hover {
+  background-color: rgb(97, 97, 97);
+}
+
+.ItemSelectionName {
+  text-align: left;
+  padding: 20px;
+  padding-top: 0px;
+  float: right;
+  font-size: 24px;
+  width: calc(100% - 340px);
+  background-color: steelblue;
+  color: white;
+  height: 110px;
+}
+
+.ItemSelectionDescription {
+  text-align: left;
+  padding: 20px;
+  padding-top: 0px;
+  float: right;
+  color: rgba(5, 83, 138, 1);
+  width: calc(100% - 340px);
+  background: rgb(249, 242, 219);
+  background: linear-gradient(
+    180deg,
+    rgba(249, 242, 219, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  height: 500px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

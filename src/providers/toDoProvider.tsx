@@ -6,14 +6,15 @@ import { ToDoClient, ToDoItem } from "../controllers/todoController";
 type ToDoItemsState = {
   items: ToDoItem[];
   loadCompleted: Boolean;
-  AddItem?: (item: ToDoItem) => Promise<void>;
-  UpdateItem?: (item: ToDoItem) => Promise<void>;
-  DeleteItem?: (id: number) => Promise<void>;
+  AddItem: (item: ToDoItem) => Promise<void>;
+  DeleteItem: (id: number) => Promise<void>;
 };
 
 const initialState: ToDoItemsState = {
   items: toDoStore,
   loadCompleted: false,
+  AddItem: async () => {},
+  DeleteItem: async () => {},
 };
 
 const initialLoadingState: State = {
@@ -84,7 +85,7 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
 
   const toDoState: ToDoItemsState = {
     items: state.itemList,
-    loadCompleted: true,
+    loadCompleted: state.initialLoadSucceeded,
     AddItem: AddItem,
     DeleteItem: DeleteItem,
   };

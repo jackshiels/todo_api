@@ -179,6 +179,49 @@ export class ToDoClient {
         }
         return Promise.resolve<ToDoItem[]>(null as any);
     }
+
+    markCompleted(id: number | undefined, complete: boolean | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/ToDo/markComplete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        if (complete === null)
+            throw new Error("The parameter 'complete' cannot be null.");
+        else if (complete !== undefined)
+            url_ += "complete=" + encodeURIComponent("" + complete) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "PATCH",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processMarkCompleted(_response);
+        });
+    }
+
+    protected processMarkCompleted(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
 }
 
 export class ToDoItem implements IToDoItem {

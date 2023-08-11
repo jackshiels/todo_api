@@ -26,6 +26,15 @@ namespace todo_service_api.Controllers
             return MockDatabase.Patch(item);
         }
 
+        [HttpPatch("markComplete")]
+        public bool MarkCompleted(int id, bool complete)
+        {
+            ToDoItem item = MockDatabase.GetById(id);
+            item.Completed = complete;
+            MockDatabase.Patch(item);
+            return !complete;
+        }
+
         [HttpPost]
         public ToDoItem Create(ToDoItem item) 
         { 
