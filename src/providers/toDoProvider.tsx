@@ -20,12 +20,9 @@ const initialState: ToDoItemsState = {
 };
 
 const initialLoadingState: State = {
-  initialLoading: true,
+  operating: false,
   initialLoadSucceeded: false,
   initialLoadFailed: false,
-  addingItem: false,
-  completingItem: false,
-  deletingItem: false,
   succeeded: false,
   failed: false,
   itemList: [],
@@ -42,7 +39,7 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const GetInitialItems = async () => {
-      dispatcher({ type: "initial_loading" });
+      dispatcher({ type: "operation_started" });
       try {
         const result: ToDoItem[] = await new ToDoClient(
           "https://localhost:7025"
@@ -59,46 +56,46 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const AddItem = async (item: ToDoItem) => {
-    dispatcher({ type: "adding_item", itemList: state.itemList });
+    dispatcher({ type: "operation_started" });
     try {
       const result: ToDoItem = await new ToDoClient(
         "https://localhost:7025"
       ).create(item);
       dispatcher({
-        type: "succeeded",
-        itemList: [...state.itemList, result],
+        type: "add_item_succeeded",
+        item: result,
       });
     } catch {
-      dispatcher({ type: "failed", itemList: state.itemList });
+      dispatcher({ type: "operation_failed" });
     }
   };
 
   const CompleteItem = async (id: number, completed: Boolean) => {
-    dispatcher({ type: "adding_item", itemList: state.itemList });
+    dispatcher({ type: "operation_started" });
     try {
       const result: boolean = await new ToDoClient(
         "https://localhost:7025"
       ).markCompleted(id, completed as boolean);
-      (state.itemList.find((c) => c.id === id) as ToDoItem).completed = result;
       dispatcher({
-        type: "succeeded",
-        itemList: [...state.itemList],
+        type: "complete_item_succeeded",
+        itemId: id,
+        completed: result,
       });
     } catch {
-      dispatcher({ type: "failed", itemList: state.itemList });
+      dispatcher({ type: "operation_failed" });
     }
   };
 
   const DeleteItem = async (id: number) => {
-    dispatcher({ type: "deleting_item", itemList: state.itemList });
+    dispatcher({ type: "operation_started" });
     try {
       await new ToDoClient("https://localhost:7025").delete(id);
       dispatcher({
-        type: "succeeded",
-        itemList: state.itemList.filter((c) => c.id !== id),
+        type: "delete_item_succeeded",
+        itemId: id,
       });
     } catch {
-      dispatcher({ type: "failed", itemList: state.itemList });
+      dispatcher({ type: "operation_failed" });
     }
   };
 

@@ -4,90 +4,78 @@ export const toDoStore: ToDoItem[] = [];
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case "initial_loading":
-      return {
-        ...state,
-        initialLoading: true,
-        initialLoadFailed: false,
-        initialLoadSucceeded: false,
-        itemList: [],
-      };
     case "initial_load_Succeeded":
       return {
         ...state,
-        initialLoading: false,
+        operating: false,
+        succeeded: true,
         initialLoadFailed: false,
         initialLoadSucceeded: true,
-        succeeded: true,
         itemList: action.itemList,
       };
     case "initial_load_failed":
       return {
         ...state,
-        initialLoading: false,
+        operating: false,
         initialLoadFailed: true,
         initialLoadSucceeded: false,
         itemList: [],
       };
-    case "adding_item":
-      return {
-        ...state,
-        succeeded: false,
-        failed: false,
-        addingItem: true,
-        itemList: action.itemList,
-      };
-    case "completing_item":
-      return {
-        ...state,
-        succeeded: false,
-        failed: false,
-        completingItem: true,
-        itemList: action.itemList,
-      };
-    case "deleting_item":
-      return {
-        ...state,
-        succeeded: false,
-        failed: false,
-        deletingItem: true,
-        itemList: action.itemList,
-      };
-    case "succeeded":
+    case "add_item_succeeded":
       return {
         ...state,
         succeeded: true,
         failed: false,
-        deletingItem: false,
-        addingItem: false,
-        itemList: action.itemList,
+        itemList: [...state.itemList, action.item],
       };
-    case "failed":
+    case "delete_item_succeeded":
       return {
         ...state,
+        succeeded: true,
+        failed: false,
+        itemList: state.itemList.filter((c) => c.id !== action.itemId),
+      };
+    case "complete_item_succeeded":
+      (
+        state.itemList.find((c) => c.id === action.itemId) as ToDoItem
+      ).completed = action.completed;
+      return {
+        ...state,
+        succeeded: true,
+        failed: false,
+      };
+    case "operation_started":
+      return {
+        ...state,
+        operating: true,
+        succeeded: false,
+        failed: false,
+      };
+    case "operation_failed":
+      return {
+        ...state,
+        operating: false,
         succeeded: false,
         failed: true,
-        deletingItem: false,
-        addingItem: false,
-        itemList: action.itemList,
       };
   }
 };
 
 export interface State {
-  initialLoading: boolean;
   initialLoadSucceeded: boolean;
   initialLoadFailed: boolean;
-  addingItem: boolean;
-  completingItem: boolean;
-  deletingItem: boolean;
+  operating: boolean;
   failed: boolean;
   succeeded: boolean;
   itemList: ToDoItem[];
 }
 
-interface InitialLoading {
-  type: "initial_loading";
+interface OperationStarted {
+  type: "operation_started";
+}
+
+interface OperationFailed {
+  type: "operation_failed";
 }
 
 interface InitialLoadSucceeded {
@@ -99,37 +87,27 @@ interface InitialLoadFailed {
   type: "initial_load_failed";
 }
 
-interface AddingItem {
-  type: "adding_item";
-  itemList: ToDoItem[];
+interface AddItemSucceeded {
+  type: "add_item_succeeded";
+  item: ToDoItem;
 }
 
-interface CompletingItem {
-  type: "completing_item";
-  itemList: ToDoItem[];
+interface DeleteItemSucceeded {
+  type: "delete_item_succeeded";
+  itemId: number;
 }
 
-interface DeletingItem {
-  type: "deleting_item";
-  itemList: ToDoItem[];
-}
-
-interface Succeeded {
-  type: "succeeded";
-  itemList: ToDoItem[];
-}
-
-interface Failed {
-  type: "failed";
-  itemList: ToDoItem[];
+interface CompleteItemSucceeded {
+  type: "complete_item_succeeded";
+  itemId: number;
+  completed: boolean;
 }
 
 export type Action =
-  | InitialLoading
   | InitialLoadSucceeded
   | InitialLoadFailed
-  | AddingItem
-  | CompletingItem
-  | DeletingItem
-  | Succeeded
-  | Failed;
+  | AddItemSucceeded
+  | DeleteItemSucceeded
+  | CompleteItemSucceeded
+  | OperationStarted
+  | OperationFailed;
