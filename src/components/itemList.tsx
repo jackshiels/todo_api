@@ -1,5 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import { FC, useState } from "react";
-import React from "react";
 import { Item } from "./item";
 import { ToDoItem } from "../controllers/todoController";
 import { useToDoContext } from "../providers/toDoProvider";
@@ -11,6 +12,11 @@ interface Props {
   setSelectedItem: (itemModel: ToDoItemModel) => void;
   clearSelectedItem: () => void;
 }
+
+const itemListCss = css`
+  float: left;
+  width: 300px;
+`;
 
 export const ItemList: FC<Props> = (props: Props) => {
   const { items, loadCompleted } = useToDoContext();
@@ -24,24 +30,22 @@ export const ItemList: FC<Props> = (props: Props) => {
   };
 
   return (
-    <>
-      <nav className="ItemList">
-        <AddItemWindow enabled={loadCompleted} />
-        {items.map((c: ToDoItem) => {
-          return (
-            <Item
-              key={c.id}
-              id={c.id as number}
-              name={c.name as string}
-              itemCompleted={c.completed as boolean}
-              description={c.description as string}
-              timestamp={c.timeStamp as Date}
-              setCompletedParent={setCompletedParent}
-              setSelectedItem={props.setSelectedItem}
-            />
-          );
-        })}
-      </nav>
-    </>
+    <nav css={itemListCss}>
+      <AddItemWindow enabled={loadCompleted} />
+      {items.map((c: ToDoItem) => {
+        return (
+          <Item
+            key={c.id}
+            id={c.id as number}
+            name={c.name as string}
+            itemCompleted={c.completed as boolean}
+            description={c.description as string}
+            timestamp={c.timeStamp as Date}
+            setCompletedParent={setCompletedParent}
+            setSelectedItem={props.setSelectedItem}
+          />
+        );
+      })}
+    </nav>
   );
 };

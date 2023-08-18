@@ -1,5 +1,7 @@
-import React from "react";
-import { FC, useReducer, useState } from "react";
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+import { FC, useReducer } from "react";
+import { DeleteItemButton } from "./deleteItemButton";
 import { useToDoContext } from "../providers/toDoProvider";
 import { Action, reducer } from "../stores/itemStore";
 import { ToDoItemModel } from "../models/itemModel";
@@ -14,22 +16,45 @@ interface Props {
   setSelectedItem: (todoItem: ToDoItemModel) => void;
 }
 
-const deleteIcon = require("../images/icons8-delete-24.png");
+const itemCheckbox = css`
+  margin-right: 15px;
+`;
+
+const itemLabel = css`
+  padding-top: 25px;
+`;
 
 export const Item: FC<Props> = (props: Props) => {
   const { DeleteItem, CompleteItem, loadCompleted } = useToDoContext();
   const { id, name, description, timestamp } = props;
 
-  const [completed, setCompleted] = useState<boolean>(props.itemCompleted);
   const [completedState, dispatcher] = useReducer(reducer, {
     completed: props.itemCompleted,
   });
 
   const HandleChange = async (action: Action) => {
-    setCompleted(!completed);
-    await CompleteItem(id, !completed);
     dispatcher(action);
+    await CompleteItem(id, !completedState.completed);
   };
+
+  const itemCss = css`
+    width: 200px;
+    float: left;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    height: 75px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 5px;
+    color: white;
+    background-color: ${completedState.completed ? "seagreen" : "crimson"};
+    border: 2px white;
+    font-size: 14pt;
+    font-weight: 600;
+    display: inline-flex;
+  `;
 
   return (
     <>
@@ -41,36 +66,23 @@ export const Item: FC<Props> = (props: Props) => {
             timestamp: timestamp,
           } as ToDoItemModel)
         }
-        className={completedState.completed ? "ItemComplete" : "Item"}
+        css={itemCss}
       >
         <input
-          className="ItemCheckbox"
+          css={itemCheckbox}
           type="checkbox"
           value="Completed"
-          checked={completed}
+          checked={completedState.completed}
           disabled={!loadCompleted}
           onChange={() => {
-            completed
+            completedState.completed
               ? HandleChange({ type: "incomplete", complete: false })
               : HandleChange({ type: "complete", complete: true });
           }}
         />
-        <label className="ItemLabel">{name}</label>
+        <label css={itemLabel}>{name}</label>
       </div>
-      <div
-        onClick={async () => {
-          await DeleteItem(id);
-        }}
-        className="DeleteItem"
-      >
-        <img
-          className="DeleteIcon"
-          width={24}
-          height={24}
-          src={deleteIcon}
-          alt="deleteIcon"
-        />
-      </div>
+      <DeleteItemButton id={id} deleteItem={DeleteItem} />
     </>
   );
 };
