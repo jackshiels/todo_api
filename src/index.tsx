@@ -5,15 +5,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Error } from "./Error";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { TodoBody } from "./components/todoBody";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <Error />,
-  },
-  {
-    path: "items/:itemId",
+    children: [
+      {
+        path: "/items/:itemId",
+        element: <TodoBody />,
+      },
+    ],
   },
 ]);
 

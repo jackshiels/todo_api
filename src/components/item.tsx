@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
+import styled from "@emotion/styled/macro";
+import { Link } from "react-router-dom";
 import { FC, useReducer } from "react";
 import { DeleteItemButton } from "./deleteItemButton";
 import { useToDoContext } from "../providers/toDoProvider";
 import { Action, reducer } from "../stores/itemStore";
-import { ToDoItemModel } from "../models/itemModel";
 
 interface Props {
   id: number;
@@ -12,21 +12,19 @@ interface Props {
   itemCompleted: boolean;
   description: string;
   timestamp: Date;
+  selected: boolean;
   setCompletedParent: (completed: boolean) => void;
-  setSelectedItem: (todoItem: ToDoItemModel) => void;
+  setSelectedItem: (itemId: number) => void;
 }
 
-const itemCheckbox = css`
-  margin-right: 15px;
-`;
-
-const itemLabel = css`
-  padding-top: 25px;
-`;
+interface ThemeProps {
+  completed: boolean;
+  selected: boolean;
+}
 
 export const Item: FC<Props> = (props: Props) => {
   const { DeleteItem, CompleteItem, loadCompleted } = useToDoContext();
-  const { id, name, description, timestamp } = props;
+  const { id, name } = props;
 
   const [completedState, dispatcher] = useReducer(reducer, {
     completed: props.itemCompleted,
@@ -37,52 +35,60 @@ export const Item: FC<Props> = (props: Props) => {
     await CompleteItem(id, !completedState.completed);
   };
 
-  const itemCss = css`
-    width: 200px;
-    float: left;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
-    height: 75px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    margin-left: 5px;
-    color: white;
-    background-color: ${completedState.completed ? "seagreen" : "crimson"};
-    border: 2px white;
-    font-size: 14pt;
-    font-weight: 600;
-    display: inline-flex;
-  `;
+  console.log(props.itemCompleted);
 
   return (
     <>
-      <div
-        onClick={() =>
-          props.setSelectedItem({
-            name: name,
-            description: description,
-            timestamp: timestamp,
-          } as ToDoItemModel)
-        }
-        css={itemCss}
-      >
-        <input
-          css={itemCheckbox}
-          type="checkbox"
-          value="Completed"
-          checked={completedState.completed}
-          disabled={!loadCompleted}
-          onChange={() => {
-            completedState.completed
-              ? HandleChange({ type: "incomplete", complete: false })
-              : HandleChange({ type: "complete", complete: true });
+      <Link to={`/items/${props.id}`}>
+        <ItemDiv
+          completed={props.itemCompleted}
+          selected={props.selected}
+          onClick={() => {
+            props.setSelectedItem(props.id);
           }}
-        />
-        <label css={itemLabel}>{name}</label>
-      </div>
+        >
+          <ItemCheckbox
+            type="checkbox"
+            value="Completed"
+            checked={completedState.completed}
+            disabled={!loadCompleted}
+            onChange={() => {
+              completedState.completed
+                ? HandleChange({ type: "incomplete", complete: false })
+                : HandleChange({ type: "complete", complete: true });
+            }}
+          />
+          <ItemLabel>{name}</ItemLabel>
+        </ItemDiv>
+      </Link>
       <DeleteItemButton id={id} deleteItem={DeleteItem} />
     </>
   );
 };
+
+const ItemDiv = styled.div<ThemeProps>`
+  width: 195px;
+  float: left;
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  height: 75px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 5px;
+  color: white;
+  background-color: ${(props) => (props.completed ? "seagreen" : "crimson")};
+  border: solid 2px ${(props) => (props.selected ? "dimgrey" : "darkgray")};
+  font-size: ${(props) => (props.selected ? "16pt" : "12pt")};
+  font-weight: 600;
+  display: inline-flex;
+`;
+
+const ItemCheckbox = styled.input`
+  margin-right: 15px;
+`;
+
+const ItemLabel = styled.label`
+  padding-top: 25px;
+`;

@@ -28,6 +28,8 @@ const initialLoadingState: State = {
   itemList: [],
 };
 
+export const toDoClient = new ToDoClient("https://localhost:7025");
+
 export const ToDoContext = createContext<ToDoItemsState>({
   ...initialState,
 });
@@ -41,9 +43,7 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
     const GetInitialItems = async () => {
       dispatcher({ type: "operation_started" });
       try {
-        const result: ToDoItem[] = await new ToDoClient(
-          "https://localhost:7025"
-        ).get();
+        const result: ToDoItem[] = await toDoClient.get();
         dispatcher({
           type: "initial_load_Succeeded",
           itemList: result,
@@ -58,9 +58,7 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
   const AddItem = async (item: ToDoItem) => {
     dispatcher({ type: "operation_started" });
     try {
-      const result: ToDoItem = await new ToDoClient(
-        "https://localhost:7025"
-      ).create(item);
+      const result: ToDoItem = await toDoClient.create(item);
       dispatcher({
         type: "add_item_succeeded",
         item: result,
@@ -73,9 +71,10 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
   const CompleteItem = async (id: number, completed: Boolean) => {
     dispatcher({ type: "operation_started" });
     try {
-      const result: boolean = await new ToDoClient(
-        "https://localhost:7025"
-      ).markCompleted(id, completed as boolean);
+      const result: boolean = await toDoClient.markCompleted(
+        id,
+        completed as boolean
+      );
       dispatcher({
         type: "complete_item_succeeded",
         itemId: id,
@@ -89,7 +88,7 @@ export const ToDoProvider = ({ children }: { children: React.ReactNode }) => {
   const DeleteItem = async (id: number) => {
     dispatcher({ type: "operation_started" });
     try {
-      await new ToDoClient("https://localhost:7025").delete(id);
+      await toDoClient.delete(id);
       dispatcher({
         type: "delete_item_succeeded",
         itemId: id,

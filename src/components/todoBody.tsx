@@ -1,32 +1,29 @@
 import { FC, useState } from "react";
 import React from "react";
 import { ItemList } from "./itemList";
-import { ToDoItemModel } from "../models/itemModel";
 import { SelectedItemWindow } from "./selectedItemWindow";
-
-const emptySelection: ToDoItemModel = {
-  name: "",
-  description: "",
-  timestamp: undefined,
-};
+import { useParams } from "react-router-dom";
 
 export const TodoBody: FC = () => {
-  const [selectedItem, setSelectedItem] =
-    useState<ToDoItemModel>(emptySelection);
-  const setThisSelectedItem = (itemModel: ToDoItemModel) => {
-    setSelectedItem(itemModel);
+  const { itemId } = useParams();
+  const [selectedItemId, setSelectedItem] = useState<number>(
+    parseInt(itemId as string)
+  );
+  const setThisSelectedItem = (itemId: number) => {
+    setSelectedItem(itemId);
   };
   const clearSelectedItem = () => {
-    setSelectedItem(emptySelection);
+    setSelectedItem(0);
   };
   return (
     <>
       <ItemList
         maxItems={5}
+        selectedItem={selectedItemId}
         setSelectedItem={setThisSelectedItem}
         clearSelectedItem={clearSelectedItem}
       />
-      <SelectedItemWindow itemModel={selectedItem as ToDoItemModel} />
+      <SelectedItemWindow itemId={selectedItemId} />
     </>
   );
 };

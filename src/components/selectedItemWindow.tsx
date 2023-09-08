@@ -1,12 +1,34 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { ToDoItemModel } from "../models/itemModel";
+import styled from "@emotion/styled/macro";
+import { useToDoContext } from "../providers/toDoProvider";
 
 interface Props {
-  itemModel: ToDoItemModel;
+  itemId: number;
 }
 
-const nameCss = css`
+export const SelectedItemWindow = (props: Props) => {
+  const { items } = useToDoContext();
+  const item = items.find((c) => c.id === props.itemId);
+  return (
+    <>
+      <Name>
+        <h2>{item?.name}</h2>
+      </Name>
+      <Description>
+        <>
+          <h2>{item?.description}</h2>
+          <p>
+            {typeof item?.timeStamp !== "undefined"
+              ? `Created: ${item.timeStamp?.toDateString()}`
+              : ""}
+          </p>
+        </>
+      </Description>
+    </>
+  );
+};
+
+const Name = styled.article`
   text-align: left;
   padding: 20px;
   padding-top: 0px;
@@ -18,7 +40,7 @@ const nameCss = css`
   height: 110px;
 `;
 
-const descriptionCss = css`
+const Description = styled.article`
   text-align: left;
   padding: 20px;
   padding-top: 0px;
@@ -33,23 +55,3 @@ const descriptionCss = css`
   );
   height: 500px;
 `;
-
-export const SelectedItemWindow = (props: Props) => {
-  return (
-    <>
-      <article css={nameCss}>
-        <h2>{props.itemModel.name}</h2>
-      </article>
-      <article css={descriptionCss}>
-        <>
-          <h2>{props.itemModel.description}</h2>
-          <p>
-            {typeof props.itemModel.timestamp !== "undefined"
-              ? `Created: ${props.itemModel.timestamp?.toDateString()}`
-              : ""}
-          </p>
-        </>
-      </article>
-    </>
-  );
-};

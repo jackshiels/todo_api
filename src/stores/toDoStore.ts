@@ -70,6 +70,7 @@ export interface State {
   itemList: ToDoItem[];
 }
 
+// Per-operation versions instead
 interface OperationStarted {
   type: "operation_started";
 }

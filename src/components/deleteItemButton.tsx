@@ -1,11 +1,35 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
+import styled from "@emotion/styled/macro";
 
-const deleteIcon = css`
+const deleteIconImage = require("../images/icons8-delete-24.png");
+
+interface props {
+  id: number;
+  deleteItem: (id: number) => {};
+}
+
+export const DeleteItemButton = (props: props) => {
+  return (
+    <DeleteDiv
+      onClick={async () => {
+        await props.deleteItem(props.id);
+      }}
+    >
+      <DeleteIcon
+        width={24}
+        height={24}
+        src={deleteIconImage}
+        alt="deleteIcon"
+      />
+    </DeleteDiv>
+  );
+};
+
+const DeleteIcon = styled.img`
   padding: 7px;
 `;
 
-const deleteItem = css`
+const DeleteDiv = styled.div`
   width: 40px;
   float: left;
   padding-top: 10px;
@@ -17,36 +41,10 @@ const deleteItem = css`
   margin-bottom: 2px;
   color: white;
   background-color: darkgray;
-  border: 2px white;
+  border: solid 2px grey;
   align-items: center;
   display: inline-flex;
   &:hover {
     background-color: rgb(97, 97, 97);
   }
 `;
-
-const deleteIconImage = require("../images/icons8-delete-24.png");
-
-interface props {
-  id: number;
-  deleteItem: (id: number) => {};
-}
-
-export const DeleteItemButton = (props: props) => {
-  return (
-    <div
-      onClick={async () => {
-        await props.deleteItem(props.id);
-      }}
-      css={deleteItem}
-    >
-      <img
-        css={deleteIcon}
-        width={24}
-        height={24}
-        src={deleteIconImage}
-        alt="deleteIcon"
-      />
-    </div>
-  );
-};
