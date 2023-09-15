@@ -7,10 +7,13 @@ public interface IMockDatabase
     ToDoItem Patch(ToDoItem item);
     ToDoItem Create(ToDoItem item);
     IEnumerable<ToDoItem> Delete(int itemId);
+    User? GetUser(string username, string password);
 }
 
 public class MockDatabase : IMockDatabase
 {
+    private List<User> users = new List<User>();
+
     private List<ToDoItem> Items { get; set; } = new()
     {
         new ToDoItem()
@@ -77,5 +80,12 @@ public class MockDatabase : IMockDatabase
         var itemToReplace = Items.First(c => c.Id == item.Id);
         itemToReplace.Completed = item.Completed;
         return itemToReplace;
+    }
+
+    public User? GetUser(string username, string password)
+    {
+        return users.FirstOrDefault(c =>
+        c.Username == username &&
+        c.Password == password);
     }
 }
