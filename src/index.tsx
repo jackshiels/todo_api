@@ -1,25 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Error } from "./Error";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { TodoBody } from "./components/todoBody";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <Error />,
-    children: [
-      {
-        path: "/items/:itemId",
-        element: <TodoBody />,
-      },
-    ],
-  },
-]);
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routing/router";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

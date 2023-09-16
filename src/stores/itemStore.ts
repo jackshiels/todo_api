@@ -14,7 +14,7 @@ export interface ItemComplete {
 
 export type Action = ItemIncomplete | ItemComplete;
 
-export const reducer = (state: State, action: Action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "incomplete":
       return { ...state, completed: false };

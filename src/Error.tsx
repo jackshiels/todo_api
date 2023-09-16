@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import React from "react";
 import { useRouteError } from "react-router-dom";
 
 const errorCss = css`
