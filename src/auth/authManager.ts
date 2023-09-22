@@ -27,4 +27,8 @@ export class AuthManager {
   public SetToken(token: string): void {
     this.cookies.set(this.tokenCookieName, token);
   }
+
+  public GetToken(): string {
+    return this.cookies.get(this.tokenCookieName);
+  }
 }

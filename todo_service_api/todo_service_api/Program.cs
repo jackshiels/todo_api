@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NSwag.Generation.Processors.Security;
+using NSwag;
 using System.Text;
 using todo_service_api.Configuration;
 using todo_service_api.Services;
@@ -11,8 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument();
-builder.Services.AddSwaggerGen();
 
 var config = builder.Configuration.GetRequiredSection("Jwt")
     .Get<JwtConfiguration>();
@@ -32,6 +32,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(config.Key))
     });
+
+builder.Services.AddOpenApiDocument(document =>
+{
+    document.AddSecurity("JWT", new OpenApiSecurityScheme
+    {
+        Type = OpenApiSecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT",
+        Description = "Type into the textbox: {your JWT token}."
+    });
+    document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor());
+});
 
 var app = builder.Build();
 

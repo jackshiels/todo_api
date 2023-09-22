@@ -8,12 +8,29 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class ToDoClient {
+import { AuthManager } from "../auth/authManager";
+export class ClientBase {
+  private token: string = "";
+  public ClientBase() {
+    this.token = AuthManager.getInstance().GetToken();
+  }
+
+  protected transformOptions(options: RequestInit) {
+    options.headers = {
+      Accept: "application/json",
+      Authorization: "Bearer " + this.token,
+    };
+    return Promise.resolve(options);
+  }
+}
+
+export class ToDoClient extends ClientBase {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
@@ -29,7 +46,9 @@ export class ToDoClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processGet(_response);
         });
     }
@@ -74,7 +93,9 @@ export class ToDoClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processPatch(_response);
         });
     }
@@ -112,7 +133,9 @@ export class ToDoClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processCreate(_response);
         });
     }
@@ -150,7 +173,9 @@ export class ToDoClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processDelete(_response);
         });
     }
@@ -199,7 +224,9 @@ export class ToDoClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processMarkCompleted(_response);
         });
     }
@@ -224,12 +251,13 @@ export class ToDoClient {
     }
 }
 
-export class UserClient {
+export class UserClient extends ClientBase {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        super();
         this.http = http ? http : window as any;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
@@ -249,7 +277,9 @@ export class UserClient {
             }
         };
 
-        return this.http.fetch(url_, options_).then((_response: Response) => {
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
             return this.processLogin(_response);
         });
     }
@@ -330,8 +360,8 @@ export interface IToDoItem {
 }
 
 export class UserLogin implements IUserLogin {
-    userName?: string;
-    password?: string;
+    userName?: string | undefined;
+    password?: string | undefined;
 
     constructor(data?: IUserLogin) {
         if (data) {
@@ -365,8 +395,8 @@ export class UserLogin implements IUserLogin {
 }
 
 export interface IUserLogin {
-    userName?: string;
-    password?: string;
+    userName?: string | undefined;
+    password?: string | undefined;
 }
 
 export interface FileResponse {

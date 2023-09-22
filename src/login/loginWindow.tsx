@@ -23,9 +23,9 @@ const LoginWindowDiv = styled.div`
   width: 300px;
   height: 300px;
   background: dodgerblue;
-  border: blueviolet 2px dashed;
+  border: black 2px dashed;
   border-radius: 15px;
-  color: indigo;
+  color: white;
   padding: 20px;
 `;
 

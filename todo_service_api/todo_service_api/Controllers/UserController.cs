@@ -41,8 +41,8 @@ namespace todo_service_api.Controllers
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Username),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.NameIdentifier, user.Username ?? throw new Exception()),
+                new Claim(ClaimTypes.Role, user.Role ?? throw new Exception())
             };
 
             var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
@@ -57,7 +57,10 @@ namespace todo_service_api.Controllers
         private User? Authenticate(UserLogin userLogin)
         {
             return _mockDatabase
-                .GetUser(userLogin.UserName, userLogin.Password) ?? null;
+                .GetUser(
+                userLogin.UserName ?? throw new Exception(), 
+                userLogin.Password ?? throw new Exception()) 
+                ?? null;
         }
     }
 }

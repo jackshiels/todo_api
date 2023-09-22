@@ -5,7 +5,7 @@ using todo_service_api.Services;
 namespace todo_service_api.Controllers
 {
     [ApiController]
-    [Authorize("Api")]
+    [Authorize("api")]
     [Route("[controller]")]
     public class ToDoController : ControllerBase
     {

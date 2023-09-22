@@ -12,7 +12,15 @@ public interface IMockDatabase
 
 public class MockDatabase : IMockDatabase
 {
-    private List<User> users = new List<User>();
+    private readonly List<User> users = new List<User>()
+    {
+        new() 
+        { 
+            Username = "jacks@revelat.io", 
+            Password = "sjcrsjcr",
+            Role = "api"
+        }
+    };
 
     private List<ToDoItem> Items { get; set; } = new()
     {

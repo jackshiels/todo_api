@@ -27,8 +27,8 @@
   </PropertyGroup>
 
   <Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
-    <Exec Command="$(NSwagExe_Net60) aspnetcore2openapi /runtime:Net60 /documentName:v1 /outputtype:OpenApi3 /assembly:$(TargetDir)todo_service_api.dll /output:swagger.json" />
-    <Exec Command="$(NSwagExe) openapi2tsclient /input:swagger.json /output:../../src/controllers/todoController.ts" />
+    <Exec Command="$(NSwagExe_Net60) aspnetcore2openapi /runtime:Net60 /documentName:v1 /outputtype:OpenApi3 /assembly:$(TargetDir)todo_service_api.dll /output:./NSwag/swagger.json" />
+    <Exec Command="$(NSwagExe) openapi2tsclient /input:./NSwag/swagger.json  /ClientBaseClass:ClientBase /ExtensionCode:../../src/controllers/clientBase.ts /useTransformOptionsMethod:true /output:../../src/controllers/todoController.ts" />
   </Target>
 
 </Project>

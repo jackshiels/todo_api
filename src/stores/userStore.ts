@@ -9,6 +9,8 @@ export interface NotLoggedIn {
 
 export interface LoggingIn {
   type: "logging_in";
+  username: string;
+  password: string;
 }
 
 export interface LoggedIn {

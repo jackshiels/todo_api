@@ -42,7 +42,6 @@ C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_a
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\obj\Debug\net6.0\todo_service_api.genruntimeconfig.cache
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\obj\Debug\net6.0\ref\todo_service_api.dll
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\configuration.json
-C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\swagger.json
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
@@ -50,3 +49,4 @@ C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_a
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Jack\Documents\source\todo_api\todo_api\todo_service_api\todo_service_api\bin\Debug\net6.0\NSwag\swagger.json
