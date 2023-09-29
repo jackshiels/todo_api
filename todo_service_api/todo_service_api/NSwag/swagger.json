@@ -185,7 +185,7 @@
         ]
       }
     },
-    "/api/User": {
+    "/User": {
       "post": {
         "tags": [
           "User"

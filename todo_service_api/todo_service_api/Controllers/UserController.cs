@@ -9,7 +9,7 @@ using todo_service_api.Services;
 namespace todo_service_api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class UserController : ControllerBase
     {
         public IMockDatabase MockDatabase { get; }
@@ -23,8 +23,8 @@ namespace todo_service_api.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        public IActionResult Login([FromBody] UserLogin userLogin)
+        [AllowAnonymous]      
+        public IActionResult Login(UserLogin userLogin)
         {
             var user = Authenticate(userLogin);
             if (user != null)
@@ -45,7 +45,7 @@ namespace todo_service_api.Controllers
                 new Claim(ClaimTypes.Role, user.Role ?? throw new Exception())
             };
 
-            var token = new JwtSecurityToken(Configuration["Jwt:Issuer"],
+            var token = new JwtSecurityToken("dsalfjhkbsdlkjnsadij9er8f09w8rhf09w8rjvp9urim0w9reh0qw9urehwvn0w9poiunrvw08uehfvn0wur8enw08urevn",
                 Configuration["Jwt:Audience"],
                 claims,
                 expires: DateTime.Now.AddMinutes(15),

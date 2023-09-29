@@ -263,7 +263,7 @@ export class UserClient extends ClientBase {
     }
 
     login(userLogin: UserLogin): Promise<FileResponse> {
-        let url_ = this.baseUrl + "/api/User";
+        let url_ = this.baseUrl + "/User";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(userLogin);

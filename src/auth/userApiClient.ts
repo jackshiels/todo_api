@@ -1,6 +1,6 @@
 import { AuthManager } from "./authManager";
 
-const url: string = "https://localhost:7025/api/User/Login";
+const url: string = "https://localhost:7025/User";
 
 interface UserLogin {
   UserName: string;
