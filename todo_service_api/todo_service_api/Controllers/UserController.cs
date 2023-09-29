@@ -9,7 +9,6 @@ using todo_service_api.Services;
 namespace todo_service_api.Controllers
 {
     [ApiController]
-    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {

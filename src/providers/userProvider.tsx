@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useContext } from "react";
 import { State, reducer } from "../stores/userStore";
 import { ToDoClient } from "../controllers/todoController";
-import useLogin from "../hooks/useLogin";
+import UserApiClient from "../auth/userApiClient";
 import { AuthManager } from "../auth/authManager";
 
 type UserLoginState = {
@@ -53,7 +53,10 @@ export const UserLoginProvider = ({
       password: password,
     });
     try {
-      const result = useLogin({ UserName: username, Password: password });
+      const result = await UserApiClient({
+        UserName: username,
+        Password: password,
+      });
       if (result) {
         dispatcher({ type: "logged_in", username: username });
         return true;
