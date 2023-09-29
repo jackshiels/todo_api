@@ -12,7 +12,6 @@ export const AddItemWindow = (props: Props) => {
   const { AddItem, loadCompleted } = useToDoContext();
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-
   const submitForm = (e: FormEvent) => {
     e.preventDefault();
     AddItem({ name: name, description: description } as ToDoItem);

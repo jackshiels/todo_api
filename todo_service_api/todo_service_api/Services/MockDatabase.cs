@@ -12,7 +12,7 @@ public interface IMockDatabase
 
 public class MockDatabase : IMockDatabase
 {
-    private readonly List<User> users = new List<User>()
+    private readonly List<User> users = new()
     {
         new() 
         { 

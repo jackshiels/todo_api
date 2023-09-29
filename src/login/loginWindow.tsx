@@ -1,16 +1,42 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled/macro";
+import { useUserContext } from "../providers/userProvider";
+import { FormEvent, useState } from "react";
+import { AuthManager } from "../auth/authManager";
 
 export const LoginWindow = () => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const { attemptLogin } = useUserContext();
+
+  const submitForm = async (e: FormEvent) => {
+    e.preventDefault();
+    const result = await attemptLogin(username, password);
+    console.log(
+      result ? AuthManager.getInstance().GetToken() : "Login failed."
+    );
+  };
+
   return (
     <>
       <LoginWindowDiv>
-        <h3>Log In</h3>
-        <h4>Enter your username and password to continue</h4>
-        <TextInput type="text" placeholder="username" />
-        <TextInput type="text" placeholder="password" />
-        <br></br>
-        <SubmitInput type="button" value="Log In" />
+        <form onSubmit={(e) => submitForm(e)}>
+          <h3>Log In</h3>
+          <h4>Enter your username and password to continue</h4>
+          <TextInput
+            onChange={(e) => setUsername(e.target.value)}
+            type="text"
+            placeholder="username"
+          />
+          <TextInput
+            onChange={(e) => setPassword(e.target.value)}
+            type="text"
+            placeholder="password"
+          />
+          <br></br>
+          <SubmitInput type="submit" value="Log In" />
+        </form>
       </LoginWindowDiv>
     </>
   );
