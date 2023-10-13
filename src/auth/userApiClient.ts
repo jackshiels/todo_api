@@ -18,7 +18,8 @@ const UserApiClient = (userLogin: UserLogin) => {
     });
 
     if (response.ok) {
-      const token = await response.json();
+      const token = await response.text();
+      console.log(token);
       AuthManager.getInstance().SetToken(token);
       return true;
     } else {

@@ -31,7 +31,7 @@ export const LoginWindow = () => {
           />
           <TextInput
             onChange={(e) => setPassword(e.target.value)}
-            type="text"
+            type="password"
             placeholder="password"
           />
           <br></br>

@@ -29,6 +29,7 @@ export class AuthManager {
   }
 
   public GetToken(): string {
+    console.log(this.cookies.get(this.tokenCookieName));
     return this.cookies.get(this.tokenCookieName);
   }
 }
