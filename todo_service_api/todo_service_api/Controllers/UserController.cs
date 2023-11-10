@@ -3,9 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using todo_service_api.Configuration;
 using todo_service_api.Services;
 
 namespace todo_service_api.Controllers

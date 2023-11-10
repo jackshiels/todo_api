@@ -4,7 +4,7 @@ import { ToDoClient } from "../controllers/todoController";
 import UserApiClient from "../auth/userApiClient";
 import { AuthManager } from "../auth/authManager";
 
-type UserLoginState = {
+export type UserLoginState = {
   loggedIn: boolean;
   username: string | null;
   attemptLogin: (username: string, password: string) => Promise<boolean>;
@@ -43,7 +43,7 @@ export const UserLoginProvider = ({
 }) => {
   const [state, dispatcher] = useReducer(reducer, initialLoadingState);
 
-  const AttemptLogin = async (
+  const attemptLogin = async (
     username: string,
     password: string
   ): Promise<boolean> => {
@@ -73,11 +73,13 @@ export const UserLoginProvider = ({
   };
 
   const loginState: UserLoginState = {
-    attemptLogin: AttemptLogin,
+    attemptLogin: attemptLogin,
     attemptLogout: Logout,
     loggedIn: state.loggedIn,
     username: state.username,
   };
+
+  console.log("initialised user provider");
 
   return (
     <UserLoginContext.Provider value={loginState}>

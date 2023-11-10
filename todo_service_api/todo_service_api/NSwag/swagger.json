@@ -29,7 +29,9 @@
         },
         "security": [
           {
-            "Bearer": []
+            "Bearer": [
+              "api"
+            ]
           }
         ]
       },
@@ -64,7 +66,9 @@
         },
         "security": [
           {
-            "Bearer": []
+            "Bearer": [
+              "api"
+            ]
           }
         ]
       },
@@ -99,7 +103,9 @@
         },
         "security": [
           {
-            "Bearer": []
+            "Bearer": [
+              "api"
+            ]
           }
         ]
       },
@@ -136,7 +142,9 @@
         },
         "security": [
           {
-            "Bearer": []
+            "Bearer": [
+              "api"
+            ]
           }
         ]
       }
@@ -180,7 +188,9 @@
         },
         "security": [
           {
-            "Bearer": []
+            "Bearer": [
+              "api"
+            ]
           }
         ]
       }

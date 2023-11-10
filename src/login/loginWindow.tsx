@@ -2,21 +2,27 @@
 import styled from "@emotion/styled/macro";
 import { useUserContext } from "../providers/userProvider";
 import { FormEvent, useState } from "react";
-import { AuthManager } from "../auth/authManager";
 
 export const LoginWindow = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [errored, setError] = useState<boolean>(false);
 
   const { attemptLogin } = useUserContext();
 
   const submitForm = async (e: FormEvent) => {
     e.preventDefault();
+    console.log(attemptLogin);
     const result = await attemptLogin(username, password);
-    console.log(
-      result ? AuthManager.getInstance().GetToken() : "Login failed."
-    );
+    console.log(result);
+    if (!result) setError(true);
+    else setError(false);
+
+    // Navigate...
+    // TODO
   };
+
+  const loginEnabled = username.length !== 0 && password.length !== 0;
 
   return (
     <>
@@ -28,14 +34,29 @@ export const LoginWindow = () => {
             onChange={(e) => setUsername(e.target.value)}
             type="text"
             placeholder="username"
+            data-testid="username"
           />
           <TextInput
             onChange={(e) => setPassword(e.target.value)}
             type="password"
-            placeholder="password"
+            data-testid="password"
           />
+          {errored ? (
+            <ErrorText data-testid="error">incorrect user details</ErrorText>
+          ) : (
+            <></>
+          )}
           <br></br>
-          <SubmitInput type="submit" value="Log In" />
+          {loginEnabled ? (
+            <SubmitInput type="submit" value="Log In" data-testid="submit" />
+          ) : (
+            <SubmitInput
+              disabled
+              type="submit"
+              value="Log In"
+              data-testid="submit"
+            />
+          )}
         </form>
       </LoginWindowDiv>
     </>
@@ -47,7 +68,6 @@ const LoginWindowDiv = styled.div`
   margin-left: calc(50% - 160px);
   margin-top: 100px;
   width: 300px;
-  height: 300px;
   background: dodgerblue;
   border: black 2px dashed;
   border-radius: 15px;
@@ -69,4 +89,9 @@ const SubmitInput = styled.input`
   border-radius: 10px;
   font-size: 14pt;
   margin: 10px;
+`;
+
+const ErrorText = styled.p`
+  color: white;
+  font-size: 14pt;
 `;

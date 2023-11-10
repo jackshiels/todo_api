@@ -1,5 +1,4 @@
 import "./App.css";
-import React from "react";
 import { AuthManager } from "./auth/authManager";
 import { ToDoProvider } from "./providers/toDoProvider";
 import { Banner } from "./components/banner";
@@ -11,23 +10,21 @@ const authManager: AuthManager = AuthManager.getInstance();
 
 function App() {
   return authManager.CheckIfLoggedIn() ? (
-    <UserLoginProvider>
-      <ToDoProvider>
-        <div className="App">
-          <Banner title="To Do Items Tracker"></Banner>
-          <Outlet />
-        </div>
-      </ToDoProvider>
-    </UserLoginProvider>
+    <ToDoProvider>
+      <div className="App">
+        <Banner title="To Do Items Tracker"></Banner>
+        <Outlet />
+      </div>
+    </ToDoProvider>
   ) : (
-    <UserLoginProvider>
-      <ToDoProvider>
-        <div className="App">
+    <ToDoProvider>
+      <div className="App">
+        <UserLoginProvider>
           <Banner title="To Do Items Tracker"></Banner>
           <LoginWindow />
-        </div>
-      </ToDoProvider>
-    </UserLoginProvider>
+        </UserLoginProvider>
+      </div>
+    </ToDoProvider>
   );
 }
 

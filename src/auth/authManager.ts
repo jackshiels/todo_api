@@ -18,10 +18,9 @@ export class AuthManager {
   }
 
   public CheckIfLoggedIn(): boolean {
-    console.log("Checking");
     const loginTokenCookie = this.cookies.get(this.tokenCookieName);
     console.log(loginTokenCookie);
-    return loginTokenCookie === undefined ? false : true;
+    return !(loginTokenCookie === undefined);
   }
 
   public SetToken(token: string): void {
@@ -29,7 +28,6 @@ export class AuthManager {
   }
 
   public GetToken(): string {
-    console.log(this.cookies.get(this.tokenCookieName));
     return this.cookies.get(this.tokenCookieName);
   }
 }
