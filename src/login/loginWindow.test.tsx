@@ -1,8 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { LoginWindow } from "./loginWindow";
-import * as useUserContext from "../providers/userProvider";
 
-const mockAttemptLogin = jest.fn(() => Promise.resolve(true));
+let mockAttemptLogin = jest.fn(() => Promise.resolve(true));
 
 jest.mock("../providers/userProvider", () => ({
   useUserContext: () => {
@@ -72,8 +71,9 @@ describe("Login window", () => {
     expect(mockAttemptLogin).toHaveBeenCalled();
   });
 
-  it("renders an error message when login is rejected", () => {
+  it("renders an error message when login is rejected", async () => {
     render(<LoginWindow />);
+    mockAttemptLogin = jest.fn(() => Promise.resolve(false));
     const button = screen.getByTestId("submit");
     const username = screen.getByRole("textbox");
     // Password has no role
@@ -82,11 +82,13 @@ describe("Login window", () => {
     fireEvent.input(username, { target: { value: "myUsername" } });
     fireEvent.input(password, { target: { value: "myPassword" } });
 
-    fireEvent.click(button);
+    await act(() => {
+      button.click();
+    });
 
     const errorMessage = screen.getByTestId("error");
 
     expect(mockAttemptLogin).toHaveBeenCalled();
-    expect(errorMessage.innerText).toBe("incorrect user details");
+    expect(errorMessage.innerHTML).toBe("incorrect user details");
   });
 });

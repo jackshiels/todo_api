@@ -6,7 +6,7 @@ import { FormEvent, useState } from "react";
 export const LoginWindow = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [errored, setError] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const { attemptLogin } = useUserContext();
 
@@ -41,7 +41,7 @@ export const LoginWindow = () => {
             type="password"
             data-testid="password"
           />
-          {errored ? (
+          {error ? (
             <ErrorText data-testid="error">incorrect user details</ErrorText>
           ) : (
             <></>
